@@ -17,9 +17,7 @@ public class FileManager {
 	public ArrayList<Double> readFile(File fileToRead) throws IOException {
 		FileReader fileReader = new FileReader(fileToRead);
 		BufferedReader bufferedReader = new BufferedReader(fileReader);
-
 		ArrayList<Double> pseudoNumbers = new ArrayList<Double>();
-
 		String data = "";
 		while ((data = bufferedReader.readLine()) != null) {
 			String[] lineData = data.split("#");

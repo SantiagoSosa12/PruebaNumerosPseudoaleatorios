@@ -2,12 +2,16 @@ package views;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+
 import constants.MyConstants;
 import controller.ActionsE;
 import views.components.OwnJButton;
@@ -18,15 +22,16 @@ import views.components.OwnJTable;
 public class PanelMedias extends JPanel {
 
 	private OwnJSpinner jspAcceptanceMargin;
-	private OwnJLabel lblAlpha, lbln, lblR, lblAz, lblZ, lblLI, lblLS, lblApproved;
+	private OwnJLabel lblAlpha, lbln, lblR, lblAz, lblZ, lblLI, lblLS;
 	private OwnJTable tblMedias;
+	private OwnJLabel jLPaso;
 
 	public static DecimalFormat FORMAT = new DecimalFormat("#.#####");
 
 	public PanelMedias(ActionListener actionListener) {
 		setBackground(Color.WHITE);
 
-		JPanel pnlElements = new JPanel(new GridLayout(2, 5, 5, 2));
+		JPanel pnlElements = new JPanel(new GridLayout(2, 6, 6, 2));
 		pnlElements.setBackground(Color.WHITE);
 
 		jspAcceptanceMargin = new OwnJSpinner("Margen de aceptacion", true);
@@ -52,17 +57,19 @@ public class PanelMedias extends JPanel {
 
 		lblLS = new OwnJLabel("LS = ");
 		pnlElements.add(lblLS);
+		
+		jLPaso = new OwnJLabel("¿Aprobo?");
+		pnlElements.add(jLPaso);
 
 		pnlElements.add(new OwnJButton("Abrir archivo", ActionsE.SELECT_FILE, actionListener));
 		pnlElements.add(new OwnJButton("Prueba de medias", ActionsE.MEDIAS, actionListener));
-	
+
 		this.setLayout(new BorderLayout());
 		tblMedias = new OwnJTable(MyConstants.RI_NUMBERS);
-		this.add(pnlElements , BorderLayout.NORTH);
+		this.add(pnlElements, BorderLayout.NORTH);
 		this.add(new JScrollPane(tblMedias), BorderLayout.CENTER);
-		lblApproved = new OwnJLabel(MyConstants.APPROVED_PROVE);
-		this.add(lblApproved, BorderLayout.SOUTH);
 		
+
 	}
 
 	public double getAcceptanceMargin(ArrayList<Double> dataForTable) {
@@ -71,7 +78,6 @@ public class PanelMedias extends JPanel {
 	}
 
 	public void approvedProve(boolean isApproved, Object[] results) {
-		lblApproved.setOpaque(true);
 		lblAlpha.setText("Alpha = " + FORMAT.format(results[0]));
 		lbln.setText("n = " + results[1]);
 		lblR.setText("R = " + FORMAT.format(results[2]));
@@ -81,9 +87,9 @@ public class PanelMedias extends JPanel {
 		lblLS.setText("LS = " + FORMAT.format(results[6]));
 
 		if (isApproved) {
-			lblApproved.setBackground(Color.decode(MyConstants.CLR_GREEN_APPROVED));
+			jLPaso.setText("Si aprobo la prueba");
 		} else {
-			lblApproved.setBackground(Color.decode(MyConstants.CLR_RED_ERROR));
+			jLPaso.setText("No aprobo la prueba");
 		}
 	}
 

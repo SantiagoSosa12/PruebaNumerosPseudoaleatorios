@@ -1,10 +1,10 @@
 package run;
 
-import controller.Control;
+import controller.Controller;
 
 public class PruebasPseudoAleatoriosRunner {
 
 	public static void main(String[] args) {
-		new Control();
+		new Controller();
 	}
 }

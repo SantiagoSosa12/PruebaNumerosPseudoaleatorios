@@ -9,7 +9,7 @@ public class KS{
 	public double[] inicial, finalx,frecObt,fAcum,pObt,fEsperA,pEsp,dif;
 	public boolean cumple;
 
-	public KS(ArrayList<Double> listaDatos,int aceptacion, int alfa){
+	public KS(ArrayList<Double> listaDatos,double aceptacion, double alfa){
 		this.listaDatos=listaDatos;
 		this.aceptacion=aceptacion;
 		this.alfa=alfa;

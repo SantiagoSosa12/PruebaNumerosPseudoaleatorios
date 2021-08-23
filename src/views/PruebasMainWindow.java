@@ -23,7 +23,7 @@ public class PruebasMainWindow extends JFrame {
 	private PanelVarianza panelVarianza;
 	private PanelKS panelKS;
 
-	public PruebasMainWindow(ActionListener actionListener,double[]datos,double[]datosks) {
+	public PruebasMainWindow(ActionListener actionListener) {
 		getContentPane().setBackground(Color.WHITE);
 		setTitle(MyConstants.APP_TITLE);
 		setIconImage(createImageIcon(MyConstants.MAIN_ICON).getImage());
@@ -39,10 +39,10 @@ public class PruebasMainWindow extends JFrame {
 		panelMedias = new PanelMedias(actionListener);
 		panelesPruebas.add("Medias", panelMedias);
 
-		panelVarianza = new PanelVarianza(datos);
+		panelVarianza = new PanelVarianza(actionListener);
 		panelesPruebas.add("Varianza", panelVarianza);
 
-		panelKS = new PanelKS(datosks);
+		panelKS = new PanelKS(actionListener);
 		panelesPruebas.add("Prueba KS", panelKS);
 
 
@@ -62,7 +62,7 @@ public class PruebasMainWindow extends JFrame {
 	}
 	
 	public void fillTable2(ArrayList<Double>list) {
-		panelKS.fillTable(list);
+		panelVarianza.fillTable(list);
 	}
 	
 	public void crearTabla2() {
@@ -96,4 +96,12 @@ public class PruebasMainWindow extends JFrame {
 	}
 
 	private static final long serialVersionUID = 1L;
+
+	public void varianzaApprovedProve(boolean aprobo, Object[] results) {
+		panelVarianza.setData(aprobo, results);
+	}
+
+	public void varianza(boolean aprobo, Object[] results) {
+		panelVarianza.setData(aprobo, results);
+	}
 }

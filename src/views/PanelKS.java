@@ -4,12 +4,15 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 import constants.MyConstants;
+import controller.ActionsE;
+import views.components.OwnJButton;
 
 public class PanelKS extends JPanel {
 	public PnlTable2 pnlTable;
@@ -17,13 +20,13 @@ public class PanelKS extends JPanel {
 	public JLabel mayor, menor,rPromedio,dMax,dMaxp,jLPaso;
 	private JPanel centro = new JPanel();
 	
-	public PanelKS(double[] datos) {
+	public PanelKS(ActionListener actionListener) {
 		centro.setLayout(new BoxLayout(this.centro , BoxLayout.X_AXIS));
 		centro.setBackground(Color.decode("#2baae2"));
 		this.setLayout(new BorderLayout());
 		this.setBackground(Color.decode("#2baae2"));
+		initComponent(actionListener);
 		crearTabla();
-		initComponent(datos);
 		this.add(this.centro , BorderLayout.CENTER);
 	}
 	
@@ -33,14 +36,14 @@ public class PanelKS extends JPanel {
 		centro.add(pnlTable3);
 	}
 
-	public void initComponent(double[]datos) {
+	public void initComponent(ActionListener actionListener) {
 		JPanel norte = new JPanel();
 		norte.setLayout(new FlowLayout());
 		norte.setBackground(Color.decode("#2baae2"));
 		
 		menor = new JLabel();
 		menor.setBorder(new TitledBorder("Menor"));
-		menor.setText(datos[1]+"");
+		menor.setText("0.00000");
 		menor.setForeground(Color.decode(MyConstants.CLR_WHITE));
 		menor.setBackground(Color.decode(MyConstants.CLR_BLUE_BTNS));
 		menor.setFont(new Font(MyConstants.FONT_ROBOTO, 1, 25));
@@ -48,7 +51,7 @@ public class PanelKS extends JPanel {
 		
 		mayor = new JLabel();
 		mayor.setBorder(new TitledBorder("Mayor"));
-		mayor.setText(datos[0]+"");
+		mayor.setText("0.00000");
 		mayor.setForeground(Color.decode(MyConstants.CLR_WHITE));
 		mayor.setBackground(Color.decode(MyConstants.CLR_BLUE_BTNS));
 		mayor.setFont(new Font(MyConstants.FONT_ROBOTO, 1, 25));
@@ -57,7 +60,7 @@ public class PanelKS extends JPanel {
 		
 		rPromedio = new JLabel();
 		rPromedio.setBorder(new TitledBorder("R Promedio"));
-		rPromedio.setText(datos[2]+"");
+		rPromedio.setText("0.00000");
 		rPromedio.setForeground(Color.decode(MyConstants.CLR_WHITE));
 		rPromedio.setBackground(Color.decode(MyConstants.CLR_BLUE_BTNS));
 		rPromedio.setFont(new Font(MyConstants.FONT_ROBOTO, 1, 25));
@@ -66,7 +69,7 @@ public class PanelKS extends JPanel {
 		
 		dMax = new JLabel();
 		dMax.setBorder(new TitledBorder("DMax"));
-		dMax.setText(datos[3]+"");
+		dMax.setText("0.00000");
 		dMax.setForeground(Color.decode(MyConstants.CLR_WHITE));
 		dMax.setBackground(Color.decode(MyConstants.CLR_BLUE_BTNS));
 		dMax.setFont(new Font(MyConstants.FONT_ROBOTO, 1, 25));
@@ -75,7 +78,7 @@ public class PanelKS extends JPanel {
 		
 		dMaxp= new JLabel();
 		dMaxp.setBorder(new TitledBorder("DMax Tabla"));
-		dMaxp.setText(datos[4]+"");
+		dMaxp.setText("0.1884");
 		dMaxp.setForeground(Color.decode(MyConstants.CLR_WHITE));
 		dMaxp.setBackground(Color.decode(MyConstants.CLR_BLUE_BTNS));
 		dMaxp.setFont(new Font(MyConstants.FONT_ROBOTO, 1, 25));
@@ -84,16 +87,14 @@ public class PanelKS extends JPanel {
 		
 		jLPaso = new JLabel();
 		jLPaso.setBorder(new TitledBorder("Cumple?"));
-		if(datos[5]==1) {
-			jLPaso.setText("Si pasa la prueba");
-		}else {
 			jLPaso.setText("No pasa la prueba");
-		}
 		jLPaso.setForeground(Color.decode(MyConstants.CLR_WHITE));
 		jLPaso.setBackground(Color.decode(MyConstants.CLR_BLUE_BTNS));
 		jLPaso.setFont(new Font(MyConstants.FONT_ROBOTO, 1, 25));
 		jLPaso.setHorizontalAlignment(JLabel.CENTER);
 		jLPaso.setBounds(840, 550, 250, 80);
+		
+		
 
 		norte.add(mayor);
 		norte.add(menor);
@@ -101,6 +102,7 @@ public class PanelKS extends JPanel {
 		norte.add(dMax);
 		norte.add(dMaxp);
 		norte.add(jLPaso);
+		norte.add(new OwnJButton("Prueba de Varianza", ActionsE.VARIANZA, actionListener));
 		this.add(norte , BorderLayout.NORTH);
 	}
 	
