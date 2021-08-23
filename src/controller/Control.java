@@ -32,9 +32,9 @@ public class Control implements ActionListener {
 		fileManager = new FileManager();
 		ArrayList<Double> valores;
 		valores =infoProfe();
-		varianza = new Varianza(valores,.95);
+		varianza = new Varianza();
 		ks = new KS(infoProfeKS(),95,5);
-		mainW = new PruebasMainWindow(this,varianza.getDatos(), ks.getDatos());
+		mainW = new PruebasMainWindow(this);
 		mainW.fillTable(valores);
 		mainW.fillTable2(infoProfeKS());
 		mainW.crearTabla2();

@@ -1,5 +1,6 @@
 package models;
 
+import java.awt.GraphicsConfiguration;
 import java.util.ArrayList;
 
 import org.apache.commons.math3.distribution.ChiSquaredDistribution;
@@ -24,8 +25,8 @@ public class Varianza {
 		this.aceptacion = acceptanceMargin;
 		
 		alfa = 1 - aceptacion;
-		// Creamos objetos con las tablas de distribución normal y chi cuadrada, y un
-		// objeto que nos ayudará a obtener la media y la varianza.
+		// Creamos objetos con las tablas de distribuciï¿½n normal y chi cuadrada, y un
+		// objeto que nos ayudarï¿½ a obtener la media y la varianza.
 		ChiSquaredDistribution chi = new ChiSquaredDistribution(grados_libertad);
 		// Metemos los datos del arreglo en el objeto estadistica.
 		DescriptiveStatistics estadistica = new DescriptiveStatistics();
@@ -50,5 +51,10 @@ public class Varianza {
 
 	public Object[] getResults() {
 		return new Object[] {aceptacion, media, varianza, li, ls };
+	}
+
+	public GraphicsConfiguration getDatos() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

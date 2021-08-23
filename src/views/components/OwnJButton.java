@@ -16,7 +16,7 @@ import controller.ActionsE;
 public class OwnJButton extends JButton {
 
 	private static final long serialVersionUID = 1L;
-
+	
 	public OwnJButton(String text, ActionsE actionCommand, ActionListener actionListener) {
 		setText(text);
 		setForeground(Color.decode(MyConstants.CLR_WHITE));
@@ -26,4 +26,9 @@ public class OwnJButton extends JButton {
 		setActionCommand(actionCommand.toString());
 		addActionListener(actionListener);
 	}
+	
+	public void changeColor(Color color) {
+		this.setBackground(color);
+	}
+	
 }
