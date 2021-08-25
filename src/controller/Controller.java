@@ -54,6 +54,12 @@ public class Controller implements ActionListener {
 		case KS:
 			break;
 		case CHI2:
+			if (FILETOREAD != null) {
+				//varianza();
+			} else {
+				mainW.showErrorMessage(MyConstants.ERR_NO_FILE_SELECTED);
+				break;
+			}
 			break;
 		case VARIANZA:
 			if (FILETOREAD != null) {
