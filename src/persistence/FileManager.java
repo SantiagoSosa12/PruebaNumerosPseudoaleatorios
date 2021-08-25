@@ -22,7 +22,12 @@ public class FileManager {
 		while ((data = bufferedReader.readLine()) != null) {
 			String[] lineData = data.split("#");
 			for (String number : lineData) {
+			if(number.length() > 7) {
+				pseudoNumbers.add(Double.parseDouble(number.substring(0, 7).replace(',', '.')));
+			}else {
 				pseudoNumbers.add(Double.parseDouble(number.replace(',', '.')));
+			}
+				
 			}
 		}
 

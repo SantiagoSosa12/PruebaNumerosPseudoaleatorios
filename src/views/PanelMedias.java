@@ -6,8 +6,10 @@ import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+
 import constants.MyConstants;
 import controller.ActionsE;
 import views.components.OwnJButton;
@@ -21,9 +23,7 @@ public class PanelMedias extends JPanel {
 	private OwnJLabel lblAlpha, lbln, lblR, lblAz, lblZ, lblLI, lblLS;
 	private OwnJTable tblMedias;
 	private OwnJLabel jLPaso;
-	private OwnJButton botonAproboPrueba;
-	
-	
+
 	public static DecimalFormat FORMAT = new DecimalFormat("#.#####");
 
 	public PanelMedias(ActionListener actionListener) {
@@ -56,13 +56,11 @@ public class PanelMedias extends JPanel {
 		lblLS = new OwnJLabel("LS = ");
 		pnlElements.add(lblLS);
 		
-		jLPaso = new OwnJLabel("Aprobo?");
+		jLPaso = new OwnJLabel("¿Aprobo?");
 		pnlElements.add(jLPaso);
-		
-		this.botonAproboPrueba = new OwnJButton("Prueba de medias", ActionsE.MEDIAS, actionListener); 
-		
+
 		pnlElements.add(new OwnJButton("Abrir archivo", ActionsE.SELECT_FILE, actionListener));
-		pnlElements.add(this.botonAproboPrueba);
+		pnlElements.add(new OwnJButton("Prueba de medias", ActionsE.MEDIAS, actionListener));
 
 		this.setLayout(new BorderLayout());
 		tblMedias = new OwnJTable(MyConstants.RI_NUMBERS);
@@ -88,10 +86,8 @@ public class PanelMedias extends JPanel {
 
 		if (isApproved) {
 			jLPaso.setText("Si aprobo la prueba");
-			this.botonAproboPrueba.changeColor(Color.green);
 		} else {
 			jLPaso.setText("No aprobo la prueba");
-			this.botonAproboPrueba.changeColor(Color.red);
 		}
 	}
 

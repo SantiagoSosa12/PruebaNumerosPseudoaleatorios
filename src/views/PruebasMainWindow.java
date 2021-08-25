@@ -22,11 +22,11 @@ public class PruebasMainWindow extends JFrame {
 	private PanelMedias panelMedias;
 	private PanelVarianza panelVarianza;
 	private PanelKS panelKS;
+	private PanelPoker panelPoker;
 
 	public PruebasMainWindow(ActionListener actionListener) {
 		getContentPane().setBackground(Color.WHITE);
 		setTitle(MyConstants.APP_TITLE);
-		setIconImage(createImageIcon(MyConstants.MAIN_ICON).getImage());
 		setExtendedState(MAXIMIZED_BOTH);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		getContentPane().setBackground(Color.WHITE);
@@ -45,7 +45,10 @@ public class PruebasMainWindow extends JFrame {
 		panelKS = new PanelKS(actionListener);
 		panelesPruebas.add("Prueba KS", panelKS);
 
-
+		panelPoker = new PanelPoker(actionListener);
+		panelesPruebas.add("Prueba Poker", panelPoker);
+		
+		
 		add(panelesPruebas);
 
 		fileChooser = new OwnJFileChooser();
@@ -54,7 +57,7 @@ public class PruebasMainWindow extends JFrame {
 	}
 	
 	public void fillTable(ArrayList<Double> datos) {
-		panelVarianza.fillTable(datos);
+		
 	}
 	
 	public void fillTable3(double[] inicial, double[] finalx,double[] frecObt,double[] fAcum,double[] pObt,double[] fEsperA,double[] pEsp,double[] dif) {
@@ -91,10 +94,6 @@ public class PruebasMainWindow extends JFrame {
 		JOptionPane.showMessageDialog(this, errorMessage, "ERROR !", JOptionPane.ERROR_MESSAGE);
 	}
 
-	public ImageIcon createImageIcon(String path) {
-		return new ImageIcon(getClass().getResource(path));
-	}
-
 	private static final long serialVersionUID = 1L;
 
 	public void varianzaApprovedProve(boolean aprobo, Object[] results) {
@@ -103,5 +102,22 @@ public class PruebasMainWindow extends JFrame {
 
 	public void varianza(boolean aprobo, Object[] results) {
 		panelVarianza.setData(aprobo, results);
+	}
+
+	public void fillTablePoker(ArrayList<Double> pseudoRandomNumbers, ArrayList<String> hands) {
+		panelPoker.fillTablePoker(pseudoRandomNumbers, hands);
+	}
+	
+	public void fillTablePoker(String[] cat, double[] oi, double[] prob,double[] ei, double[] eie) {
+		panelPoker.fillTablePoker(cat, oi, prob, ei, eie);
+	}
+
+	public void setN(String string) {
+		panelPoker.setN(string);
+		
+	}
+	
+	public void pasoPrueba(String paso, String sum) {
+		panelPoker.pasoPrueba(paso, sum);
 	}
 }
