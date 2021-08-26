@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import constants.MyConstants;
+import models.Chi2;
 import models.KS;
 import models.Medias;
 import models.Poker;
@@ -55,7 +56,7 @@ public class Controller implements ActionListener {
 			break;
 		case CHI2:
 			if (FILETOREAD != null) {
-				//varianza();
+				chiCuadrado();
 			} else {
 				mainW.showErrorMessage(MyConstants.ERR_NO_FILE_SELECTED);
 				break;
@@ -148,4 +149,18 @@ public class Controller implements ActionListener {
 		boolean paso = medias.mediasTesting(acceptanceMargin, pseudoRandomNumbers);
 		mainW.mediasApprovedProve(paso, medias.getResults());
 	}
+	
+	private void chiCuadrado() {
+		ArrayList<Double> pseudoRandomNumbers = new ArrayList<Double>();
+		try {
+			pseudoRandomNumbers = fileManager.readFile(FILETOREAD);
+		} catch (IOException e) {
+			mainW.showErrorMessage(MyConstants.ERR_READ_FILE);
+		}
+		Chi2 chi = new Chi2();
+		chi.segmentarDatos(pseudoRandomNumbers);
+		boolean aprobo = chi.asignarDatosAdicionales();
+		mainW.fillTableChi2(chi.getRi(), chi.getIntervalos(), chi.getOi(), chi.getFrecuencias() , chi.getChiCuadrado() , chi.getM() , aprobo);
+	}
+	
 }

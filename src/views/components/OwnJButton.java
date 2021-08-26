@@ -26,4 +26,9 @@ public class OwnJButton extends JButton {
 		setActionCommand(actionCommand.toString());
 		addActionListener(actionListener);
 	}
+	
+	public void setColor(Color c) {
+		this.setBackground(c);
+	}
+	
 }

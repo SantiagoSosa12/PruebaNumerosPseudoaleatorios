@@ -19,6 +19,7 @@ public class PruebasMainWindow extends JFrame {
 	private PanelVarianza panelVarianza;
 	private PanelKS panelKS;
 	private PanelPoker panelPoker;
+	private PanelChi2 panelChi2;
 
 	public PruebasMainWindow(ActionListener actionListener) {
 		getContentPane().setBackground(Color.WHITE);
@@ -44,6 +45,8 @@ public class PruebasMainWindow extends JFrame {
 		panelPoker = new PanelPoker(actionListener);
 		panelesPruebas.add("Prueba Poker", panelPoker);
 		
+		this.panelChi2 = new PanelChi2(actionListener);
+		panelesPruebas.add("Prueba Chi2" , panelChi2);
 		
 		add(panelesPruebas);
 
@@ -117,6 +120,11 @@ public class PruebasMainWindow extends JFrame {
 		panelPoker.pasoPrueba(paso, sum);
 	}
 	
-	
+	public void fillTableChi2(double[] Ri, String[] intervalo, double[] cantPorIntervalo, double[] frecuencias, double chi2, double M, boolean aprobo) {
+		this.panelChi2.fillTable(Ri, intervalo, cantPorIntervalo, frecuencias);
+		this.panelChi2.setChi2(chi2);
+		this.panelChi2.setM(M);
+		this.panelChi2.aproboPrueba(aprobo);
+	}
 	
 }
