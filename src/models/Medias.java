@@ -27,11 +27,11 @@ public class Medias {
 	/** Limite superior de aceptación */
 	private double upperLimit;
 
+	//promedio
 	private double miu;
 
 	/**
 	 * Ejecuta la prueba de medias
-	 * 
 	 * @param acceptanceMargin margen de aceptacion para la prueba de medias,
 	 *                         generalmente 95%
 	 * @param pseudoNumbers    los numeros a testear para la prueba

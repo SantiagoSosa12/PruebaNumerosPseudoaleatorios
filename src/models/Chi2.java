@@ -37,7 +37,9 @@ public class Chi2 {
 		this.crearIntervalos();
 		this.contarSiEstaDentroDeLosLimites(data);
 	}
-	
+	/**
+	 * 
+	 */
 	private void crearIntervalos() {
 		for (int i = 0; i < (int) m; i++) {
 			Intervalo intervalo = new Intervalo(i * (1 / this.m) , (i+1) * (1 / this.m), 0);
@@ -46,11 +48,15 @@ public class Chi2 {
 		this.listaIntervalos.get(this.listaIntervalos.size() - 1).setFin(1.0);;
 	}
 	
+	/**
+	 * 
+	 * @param data
+	 */
 	private void contarSiEstaDentroDeLosLimites(ArrayList<Double> data) {
 		for (int i = 0; i < this.listaIntervalos.size(); i++) {
 			int cont = 0;
 			Intervalo current = this.listaIntervalos.get(i);
-			double inferior = current.getInicial();
+			double inferior = current.getInicial() ;
 			double superior = current.getFin();
 			for (int j = 0; j < data.size(); j++) {
 				double currentData = data.get(j);

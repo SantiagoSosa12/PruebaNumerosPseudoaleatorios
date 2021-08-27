@@ -34,6 +34,7 @@ public class PanelMedias extends JPanel {
 
 		jspAcceptanceMargin = new OwnJSpinner("Margen de aceptacion", true);
 		pnlElements.add(jspAcceptanceMargin);
+		pnlElements.add(new OwnJButton("Abrir archivo", ActionsE.SELECT_FILE, actionListener));
 
 		lblAlpha = new OwnJLabel("Alpha = ");
 		pnlElements.add(lblAlpha);
@@ -59,7 +60,7 @@ public class PanelMedias extends JPanel {
 		jLPaso = new OwnJLabel("¿Aprobo?");
 		pnlElements.add(jLPaso);
 
-		pnlElements.add(new OwnJButton("Abrir archivo", ActionsE.SELECT_FILE, actionListener));
+		
 		pnlElements.add(new OwnJButton("Prueba de medias", ActionsE.MEDIAS, actionListener));
 
 		this.setLayout(new BorderLayout());

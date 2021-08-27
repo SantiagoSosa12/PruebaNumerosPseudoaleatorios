@@ -20,7 +20,10 @@ public class KS{
 	private double[] frecuenciasAcumuladas;
 	private double[] probabilidadObtenida;
 	private double[] esperadaMenosObtenida;
-	
+	/**
+	 * 
+	 * @param data
+	 */
 	public KS(ArrayList<Double> data) {
 		this.data = data;
 		this.listaIntervalos = new ArrayList<Intervalo>();
@@ -32,7 +35,9 @@ public class KS{
 		this.frecuencias = new double[10];
 		this.ks = 0;
 	}
-	
+	/**
+	 * 
+	 */
 	public void segmentarDatos() {
 		this.Ri = new double[data.size()];
 		for (int i = 0; i < data.size(); i++) {
@@ -41,14 +46,18 @@ public class KS{
 		this.crearIntervalos();
 		this.contarSiEstaDentroDeLosLimites();
 	}
-	
+	/**
+	 * 
+	 */
 	private void crearIntervalos() {
 		for (int i = 0; i < (int) this.m; i++) {
 			Intervalo intervalo = new Intervalo(i * (1 / this.m) , (i+1) * (1/this.m), 0);
 			this.listaIntervalos.add(intervalo);
 		}
 	}
-	
+	/**
+	 * 
+	 */
 	private void contarSiEstaDentroDeLosLimites() {
 		for (int i = 0; i < this.listaIntervalos.size(); i++) {
 			int cont = 0;
@@ -90,12 +99,13 @@ public class KS{
 		this.obtenerProbabilidadObtenida();
 		double total = this.obtenerTotalEsperadaMenosObtenida();
 		int cantidadDatos = this.Ri.length; 
-		this.ks = TABLA[cantidadDatos];
 		if(cantidadDatos <= 50) {
-			if(total < TABLA[cantidadDatos]) {
+			this.ks = TABLA[cantidadDatos - 1];
+			if(total < TABLA[cantidadDatos-1]) {
 				return true;
 			}
 		}else if(total < (1.36 / (Math.sqrt(cantidadDatos)))) {
+			this.ks = (1.36 / (Math.sqrt(cantidadDatos)));
 			return true;
 		}
 		return false;
@@ -110,17 +120,19 @@ public class KS{
 	
 	private void obtenerProbabilidadObtenida() {
 		for (int i = 0; i < this.frecuencias.length; i++) {
-			this.probabilidadObtenida[i] = this.frecuencias[i] / 50;
+			this.probabilidadObtenida[i] = this.frecuenciasAcumuladas[i] / 50;
 		}
 	}
 	
 	private double obtenerTotalEsperadaMenosObtenida() {
-		int total = 0;
+		double max = 0;
 		for (int i = 0; i < this.probabilidadObtenida.length; i++) {
 			this.esperadaMenosObtenida[i] = Math.abs(((i+1) * 0.1) -this.probabilidadObtenida[i]);
-			total += this.esperadaMenosObtenida[i];
+			if (this.esperadaMenosObtenida[i] > max) {
+				max = this.esperadaMenosObtenida[i];
+			}
 		}
-		return total;
+		return max;
 	}
 
 	public double getKs() {

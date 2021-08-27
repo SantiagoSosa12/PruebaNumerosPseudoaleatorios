@@ -24,7 +24,6 @@ public class Controller implements ActionListener {
 	private FileManager fileManager;
 	private PruebasMainWindow mainW;
 	private Varianza varianza;
-	private KS ks;
 	private Poker poker;
 
 	private static File FILETOREAD;
