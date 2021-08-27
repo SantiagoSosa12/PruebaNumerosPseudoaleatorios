@@ -38,7 +38,8 @@ public class Chi2 {
 		this.contarSiEstaDentroDeLosLimites(data);
 	}
 	/**
-	 * 
+	 * Se crean intervalos segun los datos, pero si tenemos 100 datos los intervalos
+	 * serian: 0.0 - 0.1, 0.1 - 0.2 ..... 
 	 */
 	private void crearIntervalos() {
 		for (int i = 0; i < (int) m; i++) {
@@ -49,7 +50,8 @@ public class Chi2 {
 	}
 	
 	/**
-	 * 
+	 * Una vez creados los inetvalos contamos cuandos datos hay dentro del mismo,
+	 * por ejemplo 0.0 - 0.1 pueden haber 5 datos independiente de si es 0.1 o 0.1
 	 * @param data
 	 */
 	private void contarSiEstaDentroDeLosLimites(ArrayList<Double> data) {
@@ -72,7 +74,11 @@ public class Chi2 {
 	}
 	
 	/**
-	 * Se ejecuta una vez hecha la segmentación
+	 * Se ejecuta una vez hecha la segmentación 
+	 * Los datos son necesarios para registralos en la tabla
+	 * aqui mismo desgregamos los datos de la lista de intervalos
+	 * los mismos son separados por vectores para mostralos en la tabla
+	 * Por ultimo calculamos el valor de CHI2 esperado usando APACHE COMMONS
 	 */
 	public boolean asignarDatosAdicionales() {
 		this.intervalos = new String[this.listaIntervalos.size()];

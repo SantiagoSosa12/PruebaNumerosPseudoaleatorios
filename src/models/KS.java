@@ -36,7 +36,7 @@ public class KS{
 		this.ks = 0;
 	}
 	/**
-	 * 
+	 * Creamos intervalos y contamos la cantidad de datos que hay en los mismos
 	 */
 	public void segmentarDatos() {
 		this.Ri = new double[data.size()];
@@ -47,7 +47,7 @@ public class KS{
 		this.contarSiEstaDentroDeLosLimites();
 	}
 	/**
-	 * 
+	 * Creamos 10 intervalos desde 0.0 a 1.0
 	 */
 	private void crearIntervalos() {
 		for (int i = 0; i < (int) this.m; i++) {
@@ -55,8 +55,9 @@ public class KS{
 			this.listaIntervalos.add(intervalo);
 		}
 	}
+	
 	/**
-	 * 
+	 * Contamos cuantos datos hay por cada rango
 	 */
 	private void contarSiEstaDentroDeLosLimites() {
 		for (int i = 0; i < this.listaIntervalos.size(); i++) {
@@ -78,7 +79,7 @@ public class KS{
 	}
 	
 	/**
-	 * Se ejecuta una vez hecha la segmentación
+	 * Desgregamos rangos en un vector y fecuencias en otro vector
 	 */
 	public void asignarFrecuencias() {
 		this.intervalos = new String[this.listaIntervalos.size()];
@@ -111,6 +112,10 @@ public class KS{
 		return false;
 	}
 	
+	/**
+	 * Obtenidas las frecuencias por cada intervalos
+	 * obtenemos aqui, las frecuencias acumuladas desde posicion 1
+	 */
 	private void obtenerFrecuenciasAcumuladas() {
 		this.frecuenciasAcumuladas[0] = this.frecuencias[0];
 		for (int i = 1; i < this.frecuencias.length; i++) {
@@ -118,12 +123,19 @@ public class KS{
 		}
 	}
 	
+	/**
+	 * Se calcula las 10 probabilidades con las frecunecias acumuladas obtenidas
+	 */
 	private void obtenerProbabilidadObtenida() {
 		for (int i = 0; i < this.frecuencias.length; i++) {
 			this.probabilidadObtenida[i] = this.frecuenciasAcumuladas[i] / 50;
 		}
 	}
-	
+	/**
+	 * Calculamos las probabilidades acumuladas obtenidas menos 
+	 * las probabilidades esperadas
+	 * @return
+	 */
 	private double obtenerTotalEsperadaMenosObtenida() {
 		double max = 0;
 		for (int i = 0; i < this.probabilidadObtenida.length; i++) {
@@ -134,7 +146,9 @@ public class KS{
 		}
 		return max;
 	}
-
+	/*
+	 * 
+	 */
 	public double getKs() {
 		return ks;
 	}
