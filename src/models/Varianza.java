@@ -6,12 +6,14 @@ import org.apache.commons.math3.distribution.ChiSquaredDistribution;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 public class Varianza {
-
+	//Cantidad de datos
 	public int cant_datos;
 	public int grados_libertad;
 	public double aceptacion;
 	public double alfa;
+	//Arraylist con los datos ingresados
 	public ArrayList<Double> datos;
+	// media, varianza, limite inferior, limite superior;
 	public double media, varianza, li, ls;
 
 	public Varianza() {
