@@ -2,123 +2,67 @@ package views;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import javax.swing.BoxLayout;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.border.TitledBorder;
-import constants.MyConstants;
-import controller.ActionsE;
-import views.components.OwnJButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+
 
 public class PanelKS extends JPanel {
-	public PnlTable2 pnlTable;
-	public PnlTable3 pnlTable3;
-	public JLabel mayor, menor,rPromedio,dMax,dMaxp,jLPaso;
-	private JPanel centro = new JPanel();
-	
-	public PanelKS(ActionListener actionListener) {
-		centro.setLayout(new BoxLayout(this.centro , BoxLayout.X_AXIS));
-		centro.setBackground(Color.decode("#2baae2"));
-		this.setLayout(new BorderLayout());
-		this.setBackground(Color.decode("#2baae2"));
-		initComponent(actionListener);
-		crearTabla();
-		this.add(this.centro , BorderLayout.CENTER);
-	}
-	
-	public void crearTabla2() {
-		pnlTable3 = new PnlTable3();
-		pnlTable3.setBounds(500, 30, 950, 280);
-		centro.add(pnlTable3);
-	}
-
-	public void initComponent(ActionListener actionListener) {
-		JPanel norte = new JPanel();
-		norte.setLayout(new FlowLayout());
-		norte.setBackground(Color.decode("#2baae2"));
-		
-		menor = new JLabel();
-		menor.setBorder(new TitledBorder("Menor"));
-		menor.setText("0.00000");
-		menor.setForeground(Color.decode(MyConstants.CLR_WHITE));
-		menor.setBackground(Color.decode(MyConstants.CLR_BLUE_BTNS));
-		menor.setFont(new Font(MyConstants.FONT_ROBOTO, 1, 25));
-		menor.setHorizontalAlignment(JLabel.CENTER);
-		
-		mayor = new JLabel();
-		mayor.setBorder(new TitledBorder("Mayor"));
-		mayor.setText("0.00000");
-		mayor.setForeground(Color.decode(MyConstants.CLR_WHITE));
-		mayor.setBackground(Color.decode(MyConstants.CLR_BLUE_BTNS));
-		mayor.setFont(new Font(MyConstants.FONT_ROBOTO, 1, 25));
-		mayor.setHorizontalAlignment(JLabel.CENTER);
-
-		
-		rPromedio = new JLabel();
-		rPromedio.setBorder(new TitledBorder("R Promedio"));
-		rPromedio.setText("0.00000");
-		rPromedio.setForeground(Color.decode(MyConstants.CLR_WHITE));
-		rPromedio.setBackground(Color.decode(MyConstants.CLR_BLUE_BTNS));
-		rPromedio.setFont(new Font(MyConstants.FONT_ROBOTO, 1, 25));
-		rPromedio.setHorizontalAlignment(JLabel.CENTER);
-		rPromedio.setBounds(340, 550, 150, 80);
-		
-		dMax = new JLabel();
-		dMax.setBorder(new TitledBorder("DMax"));
-		dMax.setText("0.00000");
-		dMax.setForeground(Color.decode(MyConstants.CLR_WHITE));
-		dMax.setBackground(Color.decode(MyConstants.CLR_BLUE_BTNS));
-		dMax.setFont(new Font(MyConstants.FONT_ROBOTO, 1, 25));
-		dMax.setHorizontalAlignment(JLabel.CENTER);
-		dMax.setBounds(510, 550, 150, 80);
-		
-		dMaxp= new JLabel();
-		dMaxp.setBorder(new TitledBorder("DMax Tabla"));
-		dMaxp.setText("0.1884");
-		dMaxp.setForeground(Color.decode(MyConstants.CLR_WHITE));
-		dMaxp.setBackground(Color.decode(MyConstants.CLR_BLUE_BTNS));
-		dMaxp.setFont(new Font(MyConstants.FONT_ROBOTO, 1, 25));
-		dMaxp.setHorizontalAlignment(JLabel.CENTER);
-		dMaxp.setBounds(670, 550, 150, 80);
-		
-		jLPaso = new JLabel();
-		jLPaso.setBorder(new TitledBorder("Cumple?"));
-			jLPaso.setText("No pasa la prueba");
-		jLPaso.setForeground(Color.decode(MyConstants.CLR_WHITE));
-		jLPaso.setBackground(Color.decode(MyConstants.CLR_BLUE_BTNS));
-		jLPaso.setFont(new Font(MyConstants.FONT_ROBOTO, 1, 25));
-		jLPaso.setHorizontalAlignment(JLabel.CENTER);
-		jLPaso.setBounds(840, 550, 250, 80);
-		
-		
-
-		norte.add(mayor);
-		norte.add(menor);
-		norte.add(rPromedio);
-		norte.add(dMax);
-		norte.add(dMaxp);
-		norte.add(jLPaso);
-		norte.add(new OwnJButton("Prueba de Varianza", ActionsE.VARIANZA, actionListener));
-		this.add(norte , BorderLayout.NORTH);
-	}
-	
-	public void crearTabla() {
-		pnlTable = new PnlTable2();
-		pnlTable.setBounds(0, 30, 700, 500);
-		centro.add(pnlTable);
-	}
-
-	public void fillTable(ArrayList<Double>datos) {
-		pnlTable.chargueProducts(datos);
-	}
-	
-	public void fillTable2(double[]inicial, double[] finalx,double[] frecObt,double[] fAcum,double[] pObt,double[] fEsperA,double[] pEsp,double[] dif) {
-		pnlTable3.chargueProducts(inicial, finalx,frecObt, fAcum, pObt, fEsperA, pEsp, dif);
-	}
 	
 	private static final long serialVersionUID = 1L;
+	private InfoKS infoKS;
+	private DefaultTableModel model;
+	private JTable tableBill;
+	
+	public PanelKS(ActionListener action) {
+		setBackground(Color.WHITE);
+		this.setLayout(new BorderLayout());
+		this.initCom(action);
+		this.setVisible(true);
+	}
+	
+	private void initCom(ActionListener action) {
+		this.infoKS = new InfoKS(action);
+		this.add(this.infoKS , BorderLayout.NORTH);
+		
+		model = new DefaultTableModel();
+		String[] aux = {"i","Ri","Intervalo","Oi","Frecuencias acumuladas" , "Probabilidad Obtenida", "Prob. esperada - obtenida" };
+		this.setBackground(Color.decode("#2baae2"));
+		model.setColumnIdentifiers(aux);
+		tableBill = new JTable(model);
+		tableBill.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+		tableBill.getTableHeader().setForeground(Color.BLACK);
+		add(new JScrollPane(tableBill) , BorderLayout.CENTER);
+		
+	}
+	
+	public void chargueProducts(double[] Ri, String[] intervalo,  double[] frecuencias,
+			double[] frecuenciasAcumuladas, double[] ProbAcumulada, double[] esperadaMinObtenida 
+			){
+		model.setRowCount(0);
+		for (int i = 0; i < Ri.length; i++) {
+			if(i > (intervalo.length - 1)) {
+				Object[] aux1 = {""+(i+1),Ri[i]," - "," - "," - ", " - "};
+				model.addRow(aux1);
+			}else {
+				Object[] aux1 = {""+(i+1), Ri[i] , intervalo[i] ," " + frecuencias[i],
+						frecuenciasAcumuladas[i], ProbAcumulada[i] , esperadaMinObtenida[i]	
+				};
+				model.addRow(aux1);
+			}
+		}
+		model.fireTableStructureChanged();
+		revalidate();
+	}
+	
+	public void setKS(double ks) {
+		this.infoKS.setKS(" "+ ks + "  ");
+	}
+	
+	public void aprobo(boolean aprobo) {
+		this.infoKS.aprobo(aprobo);
+	}
+	
 }

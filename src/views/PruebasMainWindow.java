@@ -59,18 +59,15 @@ public class PruebasMainWindow extends JFrame {
 		
 	}
 	
-	public void fillTable3(double[] inicial, double[] finalx,double[] frecObt,double[] fAcum,double[] pObt,double[] fEsperA,double[] pEsp,double[] dif) {
-		panelKS.fillTable2(inicial, finalx,frecObt,fAcum,pObt,fEsperA,pEsp,dif);
+	public void fillTableKS(double[] Ri, String[] intervalo,  double[] frecuencias,
+			double[] frecuenciasAcumuladas, double[] ProbAcumulada, double[] esperadaMinObtenida  ) {
+		panelKS.chargueProducts(Ri, intervalo, frecuencias, frecuenciasAcumuladas, ProbAcumulada, esperadaMinObtenida);
 	}
 	
 	public void fillTable2(ArrayList<Double>list) {
 		panelVarianza.fillTable(list);
 	}
 	
-	public void crearTabla2() {
-		panelKS.crearTabla2();
-	}
-
 	public File getFileFromFileChooser() {
 		int option = fileChooser.showOpenDialog(this);
 		return option != 1 ? fileChooser.getSelectedFile() : null;
@@ -114,6 +111,11 @@ public class PruebasMainWindow extends JFrame {
 	public void setN(String string) {
 		panelPoker.setN(string);
 		
+	}
+	
+	public void setKsAndAprobed(double ks , boolean aproved) {
+		this.panelKS.setKS(ks);
+		this.panelKS.aprobo(aproved);
 	}
 	
 	public void pasoPrueba(String paso, String sum) {

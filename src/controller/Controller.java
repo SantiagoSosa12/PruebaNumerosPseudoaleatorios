@@ -34,11 +34,9 @@ public class Controller implements ActionListener {
 		fileManager = new FileManager();
 		ArrayList<Double> valores = new ArrayList<>();
 		varianza = new Varianza();
-		ks = new KS(valores,0d, 0d);
 		poker = new Poker();
 		mainW = new PruebasMainWindow(this);
 		mainW.fillTable(valores);
-		mainW.crearTabla2();
 	}
 
 	@Override
@@ -53,6 +51,12 @@ public class Controller implements ActionListener {
 			}
 			break;
 		case KS:
+			if (FILETOREAD != null) {
+				ks();
+			} else {
+				mainW.showErrorMessage(MyConstants.ERR_NO_FILE_SELECTED);
+				break;
+			}
 			break;
 		case CHI2:
 			if (FILETOREAD != null) {
@@ -161,6 +165,21 @@ public class Controller implements ActionListener {
 		chi.segmentarDatos(pseudoRandomNumbers);
 		boolean aprobo = chi.asignarDatosAdicionales();
 		mainW.fillTableChi2(chi.getRi(), chi.getIntervalos(), chi.getOi(), chi.getFrecuencias() , chi.getChiCuadrado() , chi.getM() , aprobo);
+	}
+	
+	private void ks() {
+		ArrayList<Double> pseudoRandomNumbers = new ArrayList<Double>();
+		try {
+			pseudoRandomNumbers = fileManager.readFile(FILETOREAD);
+		} catch (IOException e) {
+			mainW.showErrorMessage(MyConstants.ERR_READ_FILE);
+		}
+		KS ks = new KS(pseudoRandomNumbers);
+		ks.segmentarDatos();
+		ks.asignarFrecuencias();
+		boolean aprobo = ks.pasoPrueba();
+		mainW.fillTableKS(ks.getRi(), ks.getIntervalos(), ks.getFrecuencias(), ks.getFrecuenciasAcumuladas(), ks.getProbabilidadObtenida(), ks.getEsperadaMenosObtenida());
+		mainW.setKsAndAprobed(ks.getKs(), aprobo);
 	}
 	
 }

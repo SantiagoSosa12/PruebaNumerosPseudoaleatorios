@@ -20,7 +20,7 @@ public class TestChi2 {
 		Chi2 chi = new Chi2();
 		chi.segmentarDatos(lista);
 		System.out.println(chi.toString());
-		int nivelConfianza = 95;
+//		int nivelConfianza = 95;
 		double alfa = 0.05;
 		double apache = 1 - (alfa / 2);
 		ChiSquaredDistribution chi2 = new ChiSquaredDistribution(39);//49 grados de libertad 

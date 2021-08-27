@@ -3,208 +3,180 @@ package models;
 import java.util.ArrayList;
 
 public class KS{
-	public int numDatos;
-	public ArrayList<Double> listaDatos;
-	public double mayor, menor,rPromedio,aceptacion,alfa,dMax,dMaxp;
-	public double[] inicial, finalx,frecObt,fAcum,pObt,fEsperA,pEsp,dif;
-	public boolean cumple;
-
-	public KS(ArrayList<Double> listaDatos,double aceptacion, double alfa){
-		this.listaDatos=listaDatos;
-		this.aceptacion=aceptacion;
-		this.alfa=alfa;
-		numDatos=listaDatos.size();
-		obtenerRPromedio();
-		asignarMayor();
-		asignarMenor();
-		llenarDatosIF();
-		llenarFrecuencia();
-		llenarFrecuenciaAcumulada();
-		llenarPObtenida();
-		llenarFEsperada();
-		llenarPEsperada();
-		llenarDiferencia();
-		buscarMayorDmax();
-		dMaxp=0.1884; //debido a la confiabilidad y erro, esta en la tabla, viene por defecto
-		//aqui para utilizar siempre a ese dato.
-		validarCumplimiento();
+	
+	private static double[] TABLA = {0.975, 0.84189, 0.7076, 0.62394, 0.56328, 0.51926, 0.48342, 0.45427, 0.43001, 0.40925, 0.39122
+			, 0.37543, 0.36143, 0.3489, 0.3375, 0.32733, 0.31796, 0.30936, 0.30143, 0.29408, 0.28724, 0.25283, 0.2749, 0.26931, 0.26404, 0.25908, 0.25438, 0.24993
+			, 0.2457, 0.2417, 0.23788, 0.23424, 0.20771, 0.22743, 0.22425, 0.22119, 0.21826, 0.21544, 0.21273, 0.21012, 0.2076, 0.20517, 0.20283, 0.20056, 0.19837
+			, 0.19625, 0.1942, 0.19221, 0.19028, 0.18841
+	};
+	
+	private ArrayList<Intervalo> listaIntervalos;
+	private double[] Ri;
+	private String[] intervalos;
+	private double m;//Cantidad intervalos
+	private double ks;
+	private ArrayList<Double> data;
+	private double[] frecuencias;
+	private double[] frecuenciasAcumuladas;
+	private double[] probabilidadObtenida;
+	private double[] esperadaMenosObtenida;
+	
+	public KS(ArrayList<Double> data) {
+		this.data = data;
+		this.listaIntervalos = new ArrayList<Intervalo>();
+		this.Ri = new double[this.listaIntervalos.size()];
+		this.m = 10;
+		this.frecuenciasAcumuladas = new double[10];
+		this.probabilidadObtenida = new double[10];
+		this.esperadaMenosObtenida = new double[10];
+		this.frecuencias = new double[10];
+		this.ks = 0;
 	}
 	
-	private void validarCumplimiento() {
-		if(dMax<dMaxp) {
-			cumple= true;
-		}else {
-			cumple=false;
+	public void segmentarDatos() {
+		this.Ri = new double[data.size()];
+		for (int i = 0; i < data.size(); i++) {
+			this.Ri[i] = data.get(i);
+		}
+		this.crearIntervalos();
+		this.contarSiEstaDentroDeLosLimites();
+	}
+	
+	private void crearIntervalos() {
+		for (int i = 0; i < (int) this.m; i++) {
+			Intervalo intervalo = new Intervalo(i * (1 / this.m) , (i+1) * (1/this.m), 0);
+			this.listaIntervalos.add(intervalo);
 		}
 	}
-
-	private void buscarMayorDmax() {
-		double max =0;
-		for (int i = 0; i < dif.length; i++) {
-			if(max<dif[i]) {
-				max=dif[i];
-			}
-		}
-		dMax=max;
-	}
-
-	private void llenarDiferencia() {
-		dif = new double[10];
-		for (int i = 0; i < dif.length; i++) {
-			if(pEsp[i]-pObt[i]<0) {
-				dif[i]= (pEsp[i]-pObt[i])*-1;
-			}else {
-				dif[i]= (pEsp[i]-pObt[i]);
-			}
-		}
-	}
-
-	private void llenarPEsperada() {
-		pEsp= new double[10];
-		for (int i = 0; i < pEsp.length; i++) {
-			pEsp[i] = fEsperA[i]/numDatos;
-		}
-	}
-
-	private void llenarFEsperada() {
-		fEsperA=new double[10];
-		int valor = numDatos/10;
-		fEsperA[0]= valor;
-		for (int i = 1; i < fEsperA.length; i++) {
-			fEsperA[i] = fEsperA[i-1]+valor;
-		}
-	}
-
-	private void llenarPObtenida() {
-		pObt=new double[10];
-		for (int i = 0; i < pObt.length; i++) {
-			pObt[i]= fAcum[i]/numDatos;
-		}
-	}
-
-	private void llenarFrecuenciaAcumulada() {
-		fAcum=new double[10];
-		fAcum[0] =frecObt[0];
-		for (int i = 1; i < fAcum.length; i++) {
-			if((i+1)<fAcum.length) {
-				fAcum[i]=fAcum[i-1]+frecObt[i];
-			}else {
-				fAcum[9]=fAcum[i-1]+frecObt[i];
-			}
-		}
-	}
-
-	private void llenarFrecuencia() {
-		int valor =0;
-		frecObt= new double[10];
-		for (int i = 0; i < frecObt.length; i++) {
-			for (int j = 0; j < listaDatos.size(); j++) {
-				if(listaDatos.get(j)>= inicial[i] &&listaDatos.get(j)<= finalx[i] ) {
-					valor++;
+	
+	private void contarSiEstaDentroDeLosLimites() {
+		for (int i = 0; i < this.listaIntervalos.size(); i++) {
+			int cont = 0;
+			Intervalo current = this.listaIntervalos.get(i);
+			double inferior = current.getInicial();
+			double superior = current.getFin();
+			for (int j = 0; j < data.size(); j++) {
+				double currentData = data.get(j);
+				if(currentData >= inferior && currentData < superior) {
+					cont++;
+				}
+				if(i+1 == listaIntervalos.size() && currentData == superior) {
+					cont++;
 				}
 			}
-			frecObt[i]=valor;
-			valor=0;
+			current.setCantidad(cont);
 		}
-		int value=0;
-		for (int i = 0; i < frecObt.length; i++) {
-			value+=frecObt[i];
-		}
-		if(value!=numDatos) {
-			frecObt[9]=frecObt[9]+1;
-		}
-	}
-
-	private void llenarDatosIF() {
-		inicial=new double[10];
-		finalx=new double[10];
-		inicial[0]=0.00000;
-		for (int i = 0; i < inicial.length; i++) {
-			if((i+1)<inicial.length) {
-				finalx[i] =inicial[i]+(mayor-menor)/10;
-				inicial[i+1]=finalx[i];
-			}
-		}
-		finalx[9]=1.0000;
-	}
-
-	public void obtenerRPromedio() {
-		double valor=0;
-		System.out.println(listaDatos.size());
-		for (int i = 0; i < listaDatos.size(); i++) {
-			valor+= listaDatos.get(i);
-		}
-		rPromedio = valor/numDatos;
 	}
 	
-	public void asignarMayor() {
-		double valor =0;
-		for (int i = 0; i < listaDatos.size(); i++) {
-			if(valor<listaDatos.get(i)) {
-				valor=listaDatos.get(i);
-			}
+	/**
+	 * Se ejecuta una vez hecha la segmentación
+	 */
+	public void asignarFrecuencias() {
+		this.intervalos = new String[this.listaIntervalos.size()];
+		this.frecuencias = new double[this.listaIntervalos.size()];
+		for (int i = 0; i < this.listaIntervalos.size(); i++) {
+			Intervalo intervalo = this.listaIntervalos.get(i);
+			this.intervalos[i] = intervalo.getInicial() + " - " + intervalo.getFin();
+			this.frecuencias[i] = intervalo.getCantidad();
 		}
-		mayor=valor;
 	}
 	
-	public void asignarMenor() {
-		double valor =99.99999;
-		for (int i = 0; i < listaDatos.size(); i++) {
-			if(listaDatos.get(i)<valor) {
-				valor=listaDatos.get(i);
+	/**
+	 * 3er paso
+	 * @return
+	 */
+	public boolean pasoPrueba() {
+		this.obtenerFrecuenciasAcumuladas();
+		this.obtenerProbabilidadObtenida();
+		double total = this.obtenerTotalEsperadaMenosObtenida();
+		int cantidadDatos = this.Ri.length; 
+		this.ks = TABLA[cantidadDatos];
+		if(cantidadDatos <= 50) {
+			if(total < TABLA[cantidadDatos]) {
+				return true;
 			}
+		}else if(total < (1.36 / (Math.sqrt(cantidadDatos)))) {
+			return true;
 		}
-		menor =valor;
+		return false;
 	}
-
-	public double[] getDatos() {
-		double[] aux = new double[6];
-		aux[0]=menor;
-		aux[1]=mayor;
-		aux[2]=rPromedio;
-		aux[3]=dMax;
-		aux[4]=dMaxp;
-		if(cumple==true) {
-			aux[5]= 1;
-		}else {
-			aux[5]=0;
+	
+	private void obtenerFrecuenciasAcumuladas() {
+		this.frecuenciasAcumuladas[0] = this.frecuencias[0];
+		for (int i = 1; i < this.frecuencias.length; i++) {
+			this.frecuenciasAcumuladas[i] = this.frecuenciasAcumuladas[i - 1] + this.frecuencias[i]; 
 		}
-		return aux;
+	}
+	
+	private void obtenerProbabilidadObtenida() {
+		for (int i = 0; i < this.frecuencias.length; i++) {
+			this.probabilidadObtenida[i] = this.frecuencias[i] / 50;
+		}
+	}
+	
+	private double obtenerTotalEsperadaMenosObtenida() {
+		int total = 0;
+		for (int i = 0; i < this.probabilidadObtenida.length; i++) {
+			this.esperadaMenosObtenida[i] = Math.abs(((i+1) * 0.1) -this.probabilidadObtenida[i]);
+			total += this.esperadaMenosObtenida[i];
+		}
+		return total;
 	}
 
-	public double getrPromedio() {
-		return rPromedio;
+	public double getKs() {
+		return ks;
 	}
 
-	public double[] getInicial() {
-		return inicial;
+	public void setKs(double ks) {
+		this.ks = ks;
 	}
 
-	public double[] getFinalx() {
-		return finalx;
+	public double[] getRi() {
+		return Ri;
 	}
 
-	public double[] getFrecObt() {
-		return frecObt;
+	public void setRi(double[] ri) {
+		Ri = ri;
 	}
 
-	public double[] getfAcum() {
-		return fAcum;
+	public String[] getIntervalos() {
+		return intervalos;
 	}
 
-	public double[] getpObt() {
-		return pObt;
+	public void setIntervalos(String[] intervalos) {
+		this.intervalos = intervalos;
 	}
 
-	public double[] getfEsperA() {
-		return fEsperA;
+	public double[] getFrecuencias() {
+		return frecuencias;
 	}
 
-	public double[] getpEsp() {
-		return pEsp;
+	public void setFrecuencias(double[] frecuencias) {
+		this.frecuencias = frecuencias;
 	}
 
-	public double[] getDif() {
-		return dif;
+	public double[] getFrecuenciasAcumuladas() {
+		return frecuenciasAcumuladas;
 	}
+
+	public void setFrecuenciasAcumuladas(double[] frecuenciasAcumuladas) {
+		this.frecuenciasAcumuladas = frecuenciasAcumuladas;
+	}
+
+	public double[] getProbabilidadObtenida() {
+		return probabilidadObtenida;
+	}
+
+	public void setProbabilidadObtenida(double[] probabilidadObtenida) {
+		this.probabilidadObtenida = probabilidadObtenida;
+	}
+
+	public double[] getEsperadaMenosObtenida() {
+		return esperadaMenosObtenida;
+	}
+
+	public void setEsperadaMenosObtenida(double[] esperadaMenosObtenida) {
+		this.esperadaMenosObtenida = esperadaMenosObtenida;
+	}
+	
 }
